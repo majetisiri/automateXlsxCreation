@@ -34,7 +34,7 @@ def copyColsFromSheets(wb,specsSheet,outputSheet):
 			listab[r-1].append(e.value)
 	# print listab	
 	for r in range(1,rows+1):
-		for c in range(1,columns+1):
+		for c in range(1,9):
 			j=outputSheet.cell(row=r,column=c)
 			if c ==1:
 				if r==1:
@@ -86,6 +86,7 @@ def changeBackgroundColor(wb):
 	for cell in sheet["1:1"]:
 		cell.fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
 		cell.font = Font(color="FFFFFFFF",italic=True,name="Arial",size=10)
+		sheet.auto_filter.ref='A1:H1'
 	wb.save('specs1.xlsx')
 
 
