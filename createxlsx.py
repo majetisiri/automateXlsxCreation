@@ -37,14 +37,47 @@ def copyColsFromSheets(wb,specsSheet,outputSheet):
 		for c in range(1,columns+1):
 			j=outputSheet.cell(row=r,column=c)
 			if c ==1:
-				j.value=listab[r-1][3]
+				if r==1:
+					j.value="specs MCC"
+				else:
+					j.value=listab[r-1][3]
 			elif c==2:
-				j.value=listab[r-1][5]
+				if r==1:
+					j.value="spec_name Website"
+				else:
+					j.value=listab[r-1][5]
 			elif c==3:
-				new_str=listab[r-1][5].replace(" ","")
-				j.value=new_str
+				if r==1:
+					j.value="spec_name PSN"
+				else:
+					func = lambda s: s[:1].lower() + s[1:] if s else ''
+					new_str=listab[r-1][5].replace(" ","")
+					j.value=func(new_str)
 			elif c==4:
-				j.value=listab[r-1][4]
+				if r==1:
+					j.value="parent Name"
+				else:
+					j.value=listab[r-1][4]
+			elif c==5:
+				if r==1:
+					j.value="append"
+				else:
+					j.value="null"
+			elif c==6:
+				if r==1:
+					j.value="prepend"
+				else:
+					j.value="null"
+			elif c==7:
+				if r==1:
+					j.value="imperial unitName"
+				else:
+					j.value="null"
+			elif c==8:
+				if r==1:
+					j.value="metric unitName"
+				else:
+					j.value="null"
 	wb.save('specs1.xlsx')
 
 def changeBackgroundColor(wb):
@@ -52,7 +85,7 @@ def changeBackgroundColor(wb):
 	sheet=wb['output']
 	for cell in sheet["1:1"]:
 		cell.fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
-		cell.font = Font(color="FFFFFFFF",italic=True,name="Arial")
+		cell.font = Font(color="FFFFFFFF",italic=True,name="Arial",size=10)
 	wb.save('specs1.xlsx')
 
 
