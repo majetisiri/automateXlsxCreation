@@ -106,11 +106,10 @@ def getSpecName():
 		wb.save('specs1.xlsx')
 
 def getParentNameForSpec(specName,specMCC):
-	# filePath='specCodes/'+specMCC+'.xlsx'
-	wb = openpyxl.load_workbook('spec-code.xlsx')
+	filePath='specCodes/'+specMCC+'.xlsx'
+	wb = openpyxl.load_workbook(filePath)
 	ws= wb['Sheet1']
 	rowCount = ws.max_row
-	# print rowCount
 	parentName=""
 	for i in range(2,rowCount+1):
 		specMCCCellString= "H"+str(i)
