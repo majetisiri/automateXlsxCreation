@@ -2,6 +2,8 @@ import openpyxl
 from openpyxl.styles import PatternFill
 from openpyxl.styles import Font
 import string
+import time
+start_time = time.time()
 
 def loadXlsxFile():
 	wb = openpyxl.load_workbook('specs1.xlsx')
@@ -32,7 +34,6 @@ def copyColsFromSheets(wb,specsSheet,outputSheet):
 		for c in range(1,columns+1):
 			e=specsSheet.cell(row=r,column=c)
 			listab[r-1].append(e.value)
-	# print listab	
 	for r in range(1,rows+1):
 		for c in range(1,9):
 			j=outputSheet.cell(row=r,column=c)
@@ -90,6 +91,38 @@ def changeBackgroundColor(wb):
 	wb.save('specs1.xlsx')
 
 
+def getSpecName():
+	wb = openpyxl.load_workbook('specs1.xlsx')
+	ws= wb['output']
+	rowCount=ws.max_row
+	for i in range(2,rowCount+1):
+		specNameCellString= "B"+str (i)
+		specMCCCellString= "A"+str (i)
+		specParentNameCellString= "D"+str (i)
+		specName= ws[specNameCellString].value
+		specMCC= ws[specMCCCellString].value
+		parentName=getParentNameForSpec(specName,specMCC)
+		ws[specParentNameCellString]=parentName
+		wb.save('specs1.xlsx')
+
+def getParentNameForSpec(specName,specMCC):
+	# filePath='specCodes/'+specMCC+'.xlsx'
+	wb = openpyxl.load_workbook('spec-code.xlsx')
+	ws= wb['Sheet1']
+	rowCount = ws.max_row
+	# print rowCount
+	parentName=""
+	for i in range(2,rowCount+1):
+		specMCCCellString= "H"+str(i)
+		specNameCellString= "D"+str (i)
+		parentNameCellString= "E"+str (i)
+		specMCCFromCodeSheet=ws[specMCCCellString].value
+		specNameFromCodeSheet=ws[specNameCellString].value
+		if specMCC ==specMCCFromCodeSheet:
+			if specName ==specNameFromCodeSheet:
+				parentName= ws[parentNameCellString].value
+	return parentName
+
 wb=loadXlsxFile()
 specsSheet=getSpecsSheet(wb)
 deleteOutputSheetIfExists(wb)
@@ -97,3 +130,5 @@ outputSheet=createOutputSheet(wb)
 wb.save('specs1.xlsx')
 copyColsFromSheets(wb,specsSheet,outputSheet)
 changeBackgroundColor(wb)
+getSpecName()
+print("--- %s seconds ---" % (time.time() - start_time))
