@@ -102,7 +102,10 @@ def getSpecName():
 		specName= ws[specNameCellString].value
 		specMCC= ws[specMCCCellString].value
 		parentName=getParentNameForSpec(specName,specMCC)
-		ws[specParentNameCellString]=parentName
+		if parentName == "":
+			ws[specParentNameCellString]="other"
+		else:
+			ws[specParentNameCellString]=parentName
 		wb.save('specs1.xlsx')
 
 def getParentNameForSpec(specName,specMCC):
@@ -119,7 +122,11 @@ def getParentNameForSpec(specName,specMCC):
 		specNameFromCodeSheet=ws[specNameCellString].value
 		if specMCC ==specMCCFromCodeSheet:
 			if specName ==specNameFromCodeSheet:
-				parentName= ws[parentNameCellString].value
+				parentName= ws[parentNameCellString].value.lower()
+			elif specName in specNameFromCodeSheet:
+				parentName= ws[parentNameCellString].value.lower()
+			elif specNameFromCodeSheet in specName:
+				parentName= ws[parentNameCellString].value.lower()
 	return parentName
 
 wb=loadXlsxFile()
